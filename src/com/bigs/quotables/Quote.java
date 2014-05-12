@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
 import android.R;
 import android.app.Activity;
@@ -51,9 +52,13 @@ public class Quote extends AsyncTask<String, Integer, String>  {
 
 	           String line = in.readLine();
 	           
+	           JSONObject jObject = new JSONObject(line);
+	           String returnString = "Author:";
+	           returnString += jObject.getString("author");
+	           returnString += "\nQuote:";
+	           returnString += jObject.getString("content");
 	           
-	           
-	           return line;
+	           return returnString;
 	       }catch(Exception e){
 	    	   Log.i("123", "????????????????????"+e);
 	           return "FAILED";
