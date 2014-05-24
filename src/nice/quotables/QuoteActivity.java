@@ -7,7 +7,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -138,6 +140,7 @@ public class QuoteActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.quotablesonline.com")));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

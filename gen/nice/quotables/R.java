@@ -1081,7 +1081,7 @@ containing a value of this type.
         public static final int arrowup=0x7f020058;
         public static final int ic_launcher=0x7f020059;
         public static final int paper=0x7f02005a;
-        public static final int swipe=0x7f02005b;
+        public static final int quotables=0x7f02005b;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
