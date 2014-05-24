@@ -1,9 +1,12 @@
-package com.bigs.quotables;
+package nice.quotables;
+
+import java.util.List;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
@@ -24,6 +30,9 @@ public class QuoteActivity extends ActionBarActivity {
     float y1, y2;
     String quote_string;
     String id = "";
+    String author = "";
+    Activity activity = this;
+    
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +45,44 @@ public class QuoteActivity extends ActionBarActivity {
 		}
 		
 		
-		Bundle extras = getIntent().getExtras();
-		quote_string  = getIntent().getStringExtra("quote");
-		if(quote_string.contains("ID:")){
-			id = quote_string.split("ID:")[1];
-			quote_string = quote_string.split("ID:")[0];
-        }
+		//Bundle extras = getIntent().getExtras();
+		
+		quote_string  = getIntent().getStringExtra("content");
+		id = getIntent().getStringExtra("id");
+		author = getIntent().getStringExtra("author");
+		
 		TextView tv = (TextView)findViewById(R.id.quoteText);
-		tv.setText(quote_string);
 		Typeface font = Typeface.createFromAsset(getAssets(), "Chantelli_Antiqua.ttf");
 		tv.setTypeface(font);
+		tv.setText(quote_string);
+		TextView author_view = (TextView)findViewById(R.id.author);
+		author_view.setTypeface(font);
+		author_view.setText(author);
+		setHandlers();
+	}
+	
+	public void setHandlers(){
+		ImageView iv = (ImageView) findViewById(R.id.down);
+		iv.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Quote quote = new Quote(activity, "previous", id, null);
+        		 quote.execute();
+			}
+			
+		});
+		
+		ImageView iv2 = (ImageView) findViewById(R.id.up);
+		iv2.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Quote quote = new Quote(activity, "next", id, null);
+        		 quote.execute();
+			}
+			
+		});
 	}
 	
 	@Override
@@ -68,28 +105,17 @@ public class QuoteActivity extends ActionBarActivity {
                              //if left to right sweep event on screen
                              if (x1 < x2) 
                              {
-                            	 Quote quote = new Quote(this, "previous", id);
+                            	 Quote quote = new Quote(this, "previous", id, null);
                          		 quote.execute();
                               }
                             
                              // if right to left sweep event on screen
                              if (x1 > x2)
                              {
-                            	 Quote quote = new Quote(this, "next", id);
+                            	 Quote quote = new Quote(this, "next", id, null);
                          		 quote.execute();
                              }
                             
-                             // if UP to Down sweep event on screen
-                             /*if (y1 < y2) 
-                             {
-                                 Toast.makeText(this, "UP to Down Swap Performed", Toast.LENGTH_LONG).show();
-                             }
-                            
-                             //if Down to UP sweep event on screen
-                             if (y1 > y2)
-                             {
-                                 Toast.makeText(this, "Down to UP Swap Performed", Toast.LENGTH_LONG).show();
-                              }*/
                              break;
                          }
                  }
