@@ -22,10 +22,14 @@ import android.widget.TextView;
 public class Quote extends AsyncTask<String, Integer, String>  {
 	
 	Activity activity;
+	String direction = "";
+	String id = "";
 	
-	public Quote(Activity _activity){
+	
+	public Quote(Activity _activity, String _direction, String _id){
 		activity = _activity;
-		
+		direction = _direction;
+		id = _id;
 	}
 	
 	@Override
@@ -34,6 +38,7 @@ public class Quote extends AsyncTask<String, Integer, String>  {
         Intent myIntent=new Intent(activity, QuoteActivity.class);
         myIntent.putExtra("quote", result);
         activity.startActivity(myIntent);
+        activity.finish();
     }
 	
 	@Override
@@ -45,7 +50,8 @@ public class Quote extends AsyncTask<String, Integer, String>  {
 	           HttpClient httpclient = new DefaultHttpClient();
 
 	           HttpGet request = new HttpGet();
-	           URI website = new URI("http://192.168.0.11:3000/quotes.json");
+	           //URI website = new URI("http://quotablesonline.com/quotes.json");
+	           URI website = new URI("http://192.168.0.11:3000/quotes.json?direction="+direction+"&id="+id);
 	           request.setURI(website);
 	           HttpResponse response = httpclient.execute(request);
 	           in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -53,10 +59,12 @@ public class Quote extends AsyncTask<String, Integer, String>  {
 	           String line = in.readLine();
 	           
 	           JSONObject jObject = new JSONObject(line);
-	           String returnString = "Author:";
-	           returnString += jObject.getString("author");
-	           returnString += "\nQuote:";
+	           String returnString = "Quote: ";
 	           returnString += jObject.getString("content");
+	           returnString += "\n\nAuthor: ";
+	           returnString += jObject.getString("author");
+	           returnString += "\nID:";
+	           returnString += jObject.getString("id");
 	           
 	           return returnString;
 	       }catch(Exception e){
